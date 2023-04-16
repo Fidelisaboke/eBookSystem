@@ -56,6 +56,14 @@ public class eBookGUI extends JFrame implements ActionListener{
         btnAdminLogin.addActionListener(this);
         btnUserLogin.addActionListener(this);
         btnRegister.addActionListener(this);
+        btnAdminBack.addActionListener(this);
+        btnAdminConfirm.addActionListener(this);
+        btnUserBack.addActionListener(this);
+        btnUserClear.addActionListener(this);
+        btnUserConfirm.addActionListener(this);
+        btnRegisterBack.addActionListener(this);
+        btnRegisterClear.addActionListener(this);
+        btnRegisterConfirm.addActionListener(this);
 
     }
 
