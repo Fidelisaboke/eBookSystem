@@ -102,6 +102,10 @@ public class eBookGUI extends JFrame implements ActionListener{
         pwdRegister.setText("");
     }
 
+    public void clearAdminPasswordField(){
+        pwdAdmin.setText("");
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -117,10 +121,12 @@ public class eBookGUI extends JFrame implements ActionListener{
 
         //ADMIN LOGIN PANEL:
         else if (e.getSource()==btnAdminBack){
+            clearAdminPasswordField();
             showHomePanel();
         } else if (e.getSource()==btnAdminConfirm){
 
             //if password is true:
+            clearAdminPasswordField();
             showAdminMenuPanel();
         }
 
@@ -137,12 +143,14 @@ public class eBookGUI extends JFrame implements ActionListener{
 
         //USER REGISTER PANEL:
         else if (e.getSource()==btnRegisterBack){
+            clearUserRegisterFields();
             showHomePanel();
         } else if (e.getSource()==btnRegisterClear){
             clearUserRegisterFields();
         } else if (e.getSource()==btnRegisterConfirm){
 
             //if details are true:
+            clearUserRegisterFields();
             showHomePanel();
         }
     }
