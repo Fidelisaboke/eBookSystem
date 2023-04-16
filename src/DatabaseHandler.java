@@ -23,7 +23,6 @@ public class DatabaseHandler {
         try{
             Class.forName(DB_DRIVER);
             connection = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-            JOptionPane.showMessageDialog(null, "Connection with database established.");
         } catch (SQLException | ClassNotFoundException e){
             JOptionPane.showMessageDialog(null, "Error loading database.", "Database Loading " +
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -35,7 +34,6 @@ public class DatabaseHandler {
     public void closeConnection(){
         try {
             connection.close();
-            JOptionPane.showMessageDialog(null, "Database connection closed.");
         } catch (SQLException e){
             JOptionPane.showMessageDialog(null, "Error: Failed to close database connection.",
                     "Close Connection Error", JOptionPane.ERROR_MESSAGE);
