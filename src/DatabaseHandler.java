@@ -85,4 +85,22 @@ public class DatabaseHandler {
 
     }
 
+    //View a column on a JComboBox:
+    //Will be used to view primary keys (mostly)
+    public void viewColumn(JComboBox comboBox, String sql){
+        try{
+            pst = connection.prepareStatement(sql);
+            rs = pst.executeQuery();
+            comboBox.removeAllItems();
+            while(rs.next())
+            {
+                comboBox.addItem(rs.getString(1));
+            }
+        } catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "An error has occurred when reading the database " +
+                    "column.", "Column Load Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
 }
