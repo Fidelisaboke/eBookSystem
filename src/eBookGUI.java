@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.sql.SQLException;
 
 public class eBookGUI extends JFrame implements ActionListener{
     //Components from the form are initialized here
@@ -29,16 +29,20 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnAdminConfirm;
     private JButton btnAdminBack;
 
+
+    //Instantiate the "connectDB" class to auto-connect to the DB and use existing functions:
+    connectDB db = new connectDB();
     public eBookGUI(){
         //CREATING THE FRAME
         //Setting the icon for the frame:
         ImageIcon icon = new ImageIcon("icon_book.png");
         this.setIconImage(icon.getImage());
 
-        //Size and title:
+        //Creating the program window:
         this.setVisible(true);
         this.setTitle("eBook System");
         this.setSize(640, 360);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
         //Adding other panels to the containerPanel which is set to cardLayout:
@@ -64,6 +68,23 @@ public class eBookGUI extends JFrame implements ActionListener{
         btnRegisterBack.addActionListener(this);
         btnRegisterClear.addActionListener(this);
         btnRegisterConfirm.addActionListener(this);
+
+
+        //WindowListener for when the 'X' on the frame is clicked:
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                String[] Options ={"Yes", "No"};
+                int OptionSelection = JOptionPane.showOptionDialog(null,
+                        "Do you want to close the program?", "Confirm Exit",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null,
+                        Options,Options[1]);
+                if(OptionSelection==0)
+                {
+                    System.exit(0);
+                }
+            }
+        });
 
     }
 
@@ -125,9 +146,23 @@ public class eBookGUI extends JFrame implements ActionListener{
             showHomePanel();
         } else if (e.getSource()==btnAdminConfirm){
 
-            //if password is true:
-            clearAdminPasswordField();
-            showAdminMenuPanel();
+            String password = new String(pwdAdmin.getPassword());
+
+            try {
+                if(db.verifyAdminPassword(password)) {
+                    JOptionPane.showMessageDialog(  eBookGUI.this  , "Login successful!");
+                    clearAdminPasswordField();
+                    showAdminMenuPanel();
+                }
+                else{
+                    JOptionPane.showMessageDialog(eBookGUI.this, "Login failed. Check password and" +
+                            " try again.", "Incorrect Password", JOptionPane.ERROR_MESSAGE);
+                    clearAdminPasswordField();
+                }
+            } catch (SQLException|NullPointerException ex) {
+                JOptionPane.showMessageDialog(eBookGUI.this, "Error encountered in verifying " +
+                        "password.", "Verification Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
 
         //USER LOGIN PANEL:
@@ -154,4 +189,8 @@ public class eBookGUI extends JFrame implements ActionListener{
             showHomePanel();
         }
     }
+
+
+
+
 }
