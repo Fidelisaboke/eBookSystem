@@ -1,7 +1,12 @@
+/*
+This class is where the GUI of the program is designed, mainly focusing on the frame and its contents, as well as
+various events that take place depending on the user's interaction with the GUI.
+ */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class eBookGUI extends JFrame implements ActionListener{
     //Components from the form are initialized here
@@ -12,7 +17,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnAdminLogin;
     private JButton btnUserLogin;
     private JTextField txtUserUsername;
-    private JTextField pwdUser;
+    private JPasswordField pwdUser;
     private JPasswordField pwdAdmin;
     private JButton btnRegister;
     private JPanel userRegisterPanel;
@@ -29,10 +34,16 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnAdminConfirm;
     private JButton btnAdminBack;
 
+    //Regular expression that checks the username entered during registration
+    String username_regex = "^[a-zA-Z0-9]{1,16}$";
 
-    //Instantiate the "connectDB" class to auto-connect to the DB and use existing functions:
-    connectDB db = new connectDB();
+    //Instantiate the "DatabaseHandler" class to auto-connect to the DB and use existing functions:
+    DatabaseHandler db = new DatabaseHandler();
+
     public eBookGUI(){
+        //Opening the DB Connection:
+        db.establishConnection();
+
         //CREATING THE FRAME
         //Setting the icon for the frame:
         ImageIcon icon = new ImageIcon("icon_book.png");
@@ -42,7 +53,7 @@ public class eBookGUI extends JFrame implements ActionListener{
         this.setVisible(true);
         this.setTitle("eBook System");
         this.setSize(640, 360);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 
         //Adding other panels to the containerPanel which is set to cardLayout:
@@ -81,6 +92,7 @@ public class eBookGUI extends JFrame implements ActionListener{
                         Options,Options[1]);
                 if(OptionSelection==0)
                 {
+                    db.closeConnection();
                     System.exit(0);
                 }
             }
@@ -127,7 +139,6 @@ public class eBookGUI extends JFrame implements ActionListener{
         pwdAdmin.setText("");
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -147,7 +158,6 @@ public class eBookGUI extends JFrame implements ActionListener{
         } else if (e.getSource()==btnAdminConfirm){
 
             String password = new String(pwdAdmin.getPassword());
-
             try {
                 if(db.verifyAdminPassword(password)) {
                     JOptionPane.showMessageDialog(  eBookGUI.this  , "Login successful!");
@@ -167,13 +177,31 @@ public class eBookGUI extends JFrame implements ActionListener{
 
         //USER LOGIN PANEL:
         else if (e.getSource()==btnUserBack){
+            clearUserLoginFields();
             showHomePanel();
         } else if (e.getSource()==btnUserClear){
             clearUserLoginFields();
         } else if (e.getSource()==btnUserConfirm){
 
-            //if details are true:
-            showUserMenuPanel();
+            String username = txtUserUsername.getText();
+            String password = new String(pwdUser.getPassword());
+
+            try{
+                if(db.verifyUser(username, password))
+                {
+                    JOptionPane.showMessageDialog(null, "Login successful!", "Login success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    clearUserLoginFields();
+                    showUserMenuPanel();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect username or password.",
+                            "Login Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NullPointerException | SQLException ex){
+                JOptionPane.showMessageDialog(null, "An error occurred when verifying details.",
+                        "User Verification Error", JOptionPane.ERROR_MESSAGE);
+            }
+
         }
 
         //USER REGISTER PANEL:
@@ -183,10 +211,21 @@ public class eBookGUI extends JFrame implements ActionListener{
         } else if (e.getSource()==btnRegisterClear){
             clearUserRegisterFields();
         } else if (e.getSource()==btnRegisterConfirm){
+            String username = txtRegisterUsername.getText();
+            String password = new String(pwdRegister.getPassword());
 
-            //if details are true:
-            clearUserRegisterFields();
-            showHomePanel();
+            if ((Objects.equals(username, "") || Objects.equals(password, ""))){
+                JOptionPane.showMessageDialog(null, "Username and password cannot be blank!");
+            } else{
+                if (username.matches(username_regex)) {
+                    db.registerUser(username, password);
+                    clearUserRegisterFields();
+                    showHomePanel();
+                } else{
+                    JOptionPane.showMessageDialog(null, "Please ensure that the username has" +
+                            " numbers and\nletters only, and is only up to 16 characters.");
+                }
+            }
         }
     }
 
