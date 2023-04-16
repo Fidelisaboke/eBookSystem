@@ -78,6 +78,9 @@ public class DatabaseHandler {
             JOptionPane.showMessageDialog(null, "Error: Failed to register user. Maybe the " +
                             "username already exists?",
                     "Registration Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NullPointerException e){
+            JOptionPane.showMessageDialog(null, "Error: The fields a blank. Please fill them in.",
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }

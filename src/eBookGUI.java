@@ -33,6 +33,19 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JPanel userMenuPanel;
     private JButton btnAdminConfirm;
     private JButton btnAdminBack;
+    private JButton btnAvailableBooks;
+    private JButton btnLoanedBooks;
+    private JPanel manageCatalogPanel;
+    private JButton btnModify;
+    private JButton btnDelete;
+    private JTable tblAvailableBooks;
+    private JButton btnManageCatalogSearch;
+    private JComboBox txtBookID;
+    private JTextField txtBookName;
+    private JTextField txtBookGenre;
+    private JButton backButton;
+    private JButton btnInsert;
+    private JSpinner spinner1;
 
     //Regular expression that checks the username entered during registration
     String username_regex = "^[a-zA-Z0-9]{1,16}$";
@@ -52,8 +65,10 @@ public class eBookGUI extends JFrame implements ActionListener{
         //Creating the program window:
         this.setVisible(true);
         this.setTitle("eBook System");
-        this.setSize(640, 360);
+        this.setSize(580, 420);
+        this.setResizable(false);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.setLocationRelativeTo(null); //Centering the frame
 
 
         //Adding other panels to the containerPanel which is set to cardLayout:
@@ -63,22 +78,35 @@ public class eBookGUI extends JFrame implements ActionListener{
         containerPanel.add("User Register Panel", userRegisterPanel);
         containerPanel.add("Admin Menu Panel", adminMenuPanel);
         containerPanel.add("User Menu Panel", userMenuPanel);
-
+        containerPanel.add("Manage Catalog Panel", manageCatalogPanel);
         //Adding the containerPanel:
         this.add(containerPanel);
 
         //ActionListeners for the buttons:
+        //Home Panel:
         btnAdminLogin.addActionListener(this);
         btnUserLogin.addActionListener(this);
         btnRegister.addActionListener(this);
+
+        //Admin Login Panel:
         btnAdminBack.addActionListener(this);
         btnAdminConfirm.addActionListener(this);
         btnUserBack.addActionListener(this);
+
+        //User Login Panel:
         btnUserClear.addActionListener(this);
         btnUserConfirm.addActionListener(this);
+
+        //User Register Panel:
         btnRegisterBack.addActionListener(this);
         btnRegisterClear.addActionListener(this);
         btnRegisterConfirm.addActionListener(this);
+
+        //Admin Menu Panel:
+        btnAvailableBooks.addActionListener(this);
+        btnLoanedBooks.addActionListener(this);
+
+
 
 
         //WindowListener for when the 'X' on the frame is clicked:
@@ -122,6 +150,9 @@ public class eBookGUI extends JFrame implements ActionListener{
     }
     public void showUserMenuPanel(){
         cl.show(containerPanel, "User Menu Panel");
+    }
+    public void showManageCatalogPanel(){
+        cl.show(containerPanel, "Manage Catalog Panel");
     }
 
     //Clearing fields on panels:
@@ -226,6 +257,11 @@ public class eBookGUI extends JFrame implements ActionListener{
                             " numbers and\nletters only, and is only up to 16 characters.");
                 }
             }
+        }
+
+        //ADMIN MENU PANEL:
+        else if(e.getSource()==btnAvailableBooks){
+            showManageCatalogPanel();
         }
     }
 
