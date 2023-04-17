@@ -45,7 +45,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JTextField txtBookGenre;
     private JButton backButton;
     private JButton btnInsert;
-    private JSpinner spinner1;
+    private JSpinner txtQuantity;
 
     //Regular expression that checks the username entered during registration
     String username_regex = "^[a-zA-Z0-9]{1,16}$";
@@ -82,6 +82,11 @@ public class eBookGUI extends JFrame implements ActionListener{
         //Adding the containerPanel:
         this.add(containerPanel);
 
+        //OTHER COMPONENTS:
+        //Limiting the values of the spinner(s) in the program:
+        SpinnerModel model = new SpinnerNumberModel(1, 1, 100, 1);
+        txtQuantity.setModel(model);
+
         //ActionListeners for the buttons:
         //Home Panel:
         btnAdminLogin.addActionListener(this);
@@ -105,6 +110,10 @@ public class eBookGUI extends JFrame implements ActionListener{
         //Admin Menu Panel:
         btnAvailableBooks.addActionListener(this);
         btnLoanedBooks.addActionListener(this);
+
+        //Manage Catalog Panel:
+        btnManageCatalogSearch.addActionListener(this);
+        btnInsert.addActionListener(this);
 
 
 
@@ -220,16 +229,16 @@ public class eBookGUI extends JFrame implements ActionListener{
             try{
                 if(db.verifyUser(username, password))
                 {
-                    JOptionPane.showMessageDialog(null, "Login successful!", "Login success",
+                    JOptionPane.showMessageDialog(eBookGUI.this, "Login successful!", "Login success",
                             JOptionPane.INFORMATION_MESSAGE);
                     clearUserLoginFields();
                     showUserMenuPanel();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Incorrect username or password.",
+                    JOptionPane.showMessageDialog(eBookGUI.this, "Incorrect username or password.",
                             "Login Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (NullPointerException | SQLException ex){
-                JOptionPane.showMessageDialog(null, "An error occurred when verifying details.",
+                JOptionPane.showMessageDialog(eBookGUI.this, "An error occurred when verifying details.",
                         "User Verification Error", JOptionPane.ERROR_MESSAGE);
             }
 
@@ -246,14 +255,14 @@ public class eBookGUI extends JFrame implements ActionListener{
             String password = new String(pwdRegister.getPassword());
 
             if ((Objects.equals(username, "") || Objects.equals(password, ""))){
-                JOptionPane.showMessageDialog(null, "Username and password cannot be blank!");
+                JOptionPane.showMessageDialog(eBookGUI.this, "Username and password cannot be blank!");
             } else{
                 if (username.matches(username_regex)) {
                     db.registerUser(username, password);
                     clearUserRegisterFields();
                     showHomePanel();
                 } else{
-                    JOptionPane.showMessageDialog(null, "Please ensure that the username has" +
+                    JOptionPane.showMessageDialog(  eBookGUI.this, "Please ensure that the username has" +
                             " numbers and\nletters only, and is only up to 16 characters.");
                 }
             }
@@ -262,6 +271,25 @@ public class eBookGUI extends JFrame implements ActionListener{
         //ADMIN MENU PANEL:
         else if(e.getSource()==btnAvailableBooks){
             showManageCatalogPanel();
+            db.viewColumn(txtBookID);
+        }
+
+
+        //MANAGE CATALOG PANEL:
+        else if(e.getSource()==btnManageCatalogSearch){
+            db.displayRecord(txtBookID, txtBookName, txtBookGenre, txtQuantity);
+        } else if(e.getSource()==btnInsert){
+
+            try {
+                String bookName = txtBookName.getText();
+                String bookGenre = txtBookGenre.getText();
+                int bookQuantity = (int) txtQuantity.getValue();
+                db.addRecord(bookName, bookGenre, bookQuantity);
+                db.viewColumn(txtBookID);
+            } catch (Exception ex){
+                JOptionPane.showMessageDialog(eBookGUI.this, "An error has been encountered.\n" +
+                        "Please check your input and try again.", "Insert Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

@@ -7,6 +7,7 @@ This Java class handles database operations:
 
 import javax.swing.*;
 import java.sql.*;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 public class DatabaseHandler {
@@ -87,8 +88,9 @@ public class DatabaseHandler {
 
     //View a column on a JComboBox:
     //Will be used to view primary keys (mostly)
-    public void viewColumn(JComboBox comboBox, String sql){
+    public void viewColumn(JComboBox comboBox){
         try{
+            String sql = "SELECT book_id FROM tbl_books";
             pst = connection.prepareStatement(sql);
             rs = pst.executeQuery();
             comboBox.removeAllItems();
@@ -101,6 +103,50 @@ public class DatabaseHandler {
                     "column.", "Column Load Error", JOptionPane.ERROR_MESSAGE);
         }
 
+    }
+
+    //Read/View a specific entry in tbl_stock by using the item_id
+    public void displayRecord(JComboBox comboBox, JTextField txtName, JTextField txtGenre, JSpinner txtQuantity){
+        try{
+            String bookID = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
+
+
+            pst = connection.prepareStatement("SELECT * FROM tbl_books WHERE book_id=?");
+            pst.setString(1, bookID);
+            rs = pst.executeQuery();
+
+            if(rs.next()){
+                txtName.setText(rs.getString(2));
+                txtGenre.setText(rs.getString(3));
+                txtQuantity.setValue(rs.getObject(4));
+            } else{
+                JOptionPane.showMessageDialog(null, "No record found", "Record Missing", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "An exception has occurred when trying to display " +
+                    "record", "Display Record Error.", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //Add record to the stock table
+    public void addRecord(String bookName, String bookGenre, int bookQuantity){
+        try{
+            pst = connection.prepareStatement("INSERT INTO tbl_books (book_name, book_genre, book_quantity) VALUES (?,?,?)");
+            pst.setString(1, bookName);
+            pst.setString(2, bookGenre);
+            pst.setInt(3, bookQuantity);
+
+            int k = pst.executeUpdate();
+
+            if(k==1){
+                JOptionPane.showMessageDialog(null, "Data has been inserted to the table.");
+            } else{
+                JOptionPane.showMessageDialog(null, "Error: Record has not been inserted.");
+            }
+        } catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error: Record has not been inserted." ,
+                    "Insert Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 }
