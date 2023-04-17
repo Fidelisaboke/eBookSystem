@@ -129,7 +129,14 @@ public class eBookGUI extends JFrame implements ActionListener{
                         Options,Options[1]);
                 if(OptionSelection==0)
                 {
-                    db.closeConnection();
+                    try{
+                        db.closeConnection();
+                        System.exit(0);
+                    } catch (Exception ex){
+                        JOptionPane.showMessageDialog(eBookGUI.this, "Error encountered in closing " +
+                                "connection");
+                        System.exit(0);
+                    }
                     System.exit(0);
                 }
             }
