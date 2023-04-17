@@ -290,6 +290,11 @@ public class eBookGUI extends JFrame implements ActionListener{
                 JOptionPane.showMessageDialog(eBookGUI.this, "An error has been encountered.\n" +
                         "Please check your input and try again.", "Insert Error", JOptionPane.ERROR_MESSAGE);
             }
+        } else if(e.getSource()==btnModify){
+            String bookName = txtBookName.getText();
+            String bookGenre = txtBookGenre.getText();
+            int bookQuantity = (int) txtQuantity.getValue();
+            db.modifyRecord(txtBookID, bookName, bookGenre, bookQuantity);
         }
     }
 

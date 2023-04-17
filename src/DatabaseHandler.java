@@ -105,7 +105,7 @@ public class DatabaseHandler {
 
     }
 
-    //Read/View a specific entry in tbl_stock by using the item_id
+    //Read or view an entry in the books table by using the book_id
     public void displayRecord(JComboBox comboBox, JTextField txtName, JTextField txtGenre, JSpinner txtQuantity){
         try{
             String bookID = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
@@ -128,7 +128,7 @@ public class DatabaseHandler {
         }
     }
 
-    //Add record to the stock table
+    //Add record to the books table
     public void addRecord(String bookName, String bookGenre, int bookQuantity){
         try{
             pst = connection.prepareStatement("INSERT INTO tbl_books (book_name, book_genre, book_quantity) VALUES (?,?,?)");
@@ -146,6 +146,30 @@ public class DatabaseHandler {
         } catch (SQLException ex){
             JOptionPane.showMessageDialog(null, "Error: Record has not been inserted." ,
                     "Insert Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //Change a record of the table
+    public void modifyRecord(JComboBox comboBox, String bookName, String bookGenre, int bookQuantity){
+        try{
+            String bookID = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
+            String sql = "UPDATE tbl_stock SET book_name=?, book_genre=?, book_quantity=? WHERE book_id=?";
+            pst = connection.prepareStatement(sql);
+
+            pst.setString(1, bookName);
+            pst.setString(2, bookGenre);
+            pst.setFloat(3, bookQuantity);
+            pst.setString(4, bookID);
+            int k = pst.executeUpdate();
+            if(k==1){
+                JOptionPane.showMessageDialog(null, "Data has been changed successfully.", "Modification Successful", JOptionPane.INFORMATION_MESSAGE);
+            } else{
+                JOptionPane.showMessageDialog(null, "Error: Record has not been changed.");
+            }
+
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(null, "Error: Record has not been changed. Please try again." , "Insert Error", JOptionPane.ERROR_MESSAGE);
+
         }
     }
 
