@@ -43,7 +43,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JComboBox txtBookID;
     private JTextField txtBookName;
     private JTextField txtBookGenre;
-    private JButton backButton;
+    private JButton btnManageCatalogBack;
     private JButton btnInsert;
     private JSpinner txtQuantity;
 
@@ -112,8 +112,11 @@ public class eBookGUI extends JFrame implements ActionListener{
         btnLoanedBooks.addActionListener(this);
 
         //Manage Catalog Panel:
+        btnManageCatalogBack.addActionListener(this);
         btnManageCatalogSearch.addActionListener(this);
         btnInsert.addActionListener(this);
+        btnModify.addActionListener(this);
+        btnDelete.addActionListener(this);
 
 
 
@@ -185,6 +188,11 @@ public class eBookGUI extends JFrame implements ActionListener{
     public void clearAdminPasswordField(){
         pwdAdmin.setText("");
     }
+    public void clearManageCatalogFields(){
+        txtBookName.setText("");
+        txtBookGenre.setText("");
+        txtQuantity.setValue(0);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -239,7 +247,7 @@ public class eBookGUI extends JFrame implements ActionListener{
                     JOptionPane.showMessageDialog(eBookGUI.this, "Login successful!", "Login success",
                             JOptionPane.INFORMATION_MESSAGE);
                     clearUserLoginFields();
-                    showUserMenuPanel();
+                    showUserMenuPanel(); //Will be developed 'soon.'
                 } else {
                     JOptionPane.showMessageDialog(eBookGUI.this, "Incorrect username or password.",
                             "Login Error", JOptionPane.ERROR_MESSAGE);
@@ -279,10 +287,16 @@ public class eBookGUI extends JFrame implements ActionListener{
         else if(e.getSource()==btnAvailableBooks){
             showManageCatalogPanel();
             db.viewColumn(txtBookID);
+        } else if(e.getSource()==btnLoanedBooks){
+            JOptionPane.showMessageDialog(eBookGUI.this, "Feature still in development!");
         }
 
 
         //MANAGE CATALOG PANEL:
+        else if(e.getSource()==btnManageCatalogBack){
+            clearManageCatalogFields();
+            showHomePanel();
+        }
         else if(e.getSource()==btnManageCatalogSearch){
             db.displayRecord(txtBookID, txtBookName, txtBookGenre, txtQuantity);
         } else if(e.getSource()==btnInsert){
@@ -302,6 +316,8 @@ public class eBookGUI extends JFrame implements ActionListener{
             String bookGenre = txtBookGenre.getText();
             int bookQuantity = (int) txtQuantity.getValue();
             db.modifyRecord(txtBookID, bookName, bookGenre, bookQuantity);
+        } else if(e.getSource()==btnDelete) {
+            db.deleteRecord(txtBookID);
         }
     }
 

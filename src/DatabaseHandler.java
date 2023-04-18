@@ -27,7 +27,6 @@ public class DatabaseHandler {
         } catch (SQLException | ClassNotFoundException e){
             JOptionPane.showMessageDialog(null, "Error loading database.", "Database Loading " +
                     "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -152,24 +151,44 @@ public class DatabaseHandler {
     //Change a record of the table
     public void modifyRecord(JComboBox comboBox, String bookName, String bookGenre, int bookQuantity){
         try{
-            String bookID = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
-            String sql = "UPDATE tbl_stock SET book_name=?, book_genre=?, book_quantity=? WHERE book_id=?";
+            int bookID = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
+            String sql = "UPDATE tbl_books SET book_name=?, book_genre=?, book_quantity=? WHERE book_id=?";
             pst = connection.prepareStatement(sql);
 
             pst.setString(1, bookName);
             pst.setString(2, bookGenre);
-            pst.setFloat(3, bookQuantity);
-            pst.setString(4, bookID);
+            pst.setInt(3, bookQuantity);
+            pst.setInt(4, bookID);
             int k = pst.executeUpdate();
             if(k==1){
-                JOptionPane.showMessageDialog(null, "Data has been changed successfully.", "Modification Successful", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Data has been changed successfully.",
+                        "Modification Successful", JOptionPane.INFORMATION_MESSAGE);
             } else{
                 JOptionPane.showMessageDialog(null, "Error: Record has not been changed.");
             }
 
         } catch (Exception ex){
-            JOptionPane.showMessageDialog(null, "Error: Record has not been changed. Please try again." , "Insert Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error: Record has not been changed. Please try" +
+                    " again." , "Insert Error", JOptionPane.ERROR_MESSAGE);
 
+        }
+    }
+
+    public void deleteRecord(JComboBox comboBox){
+        try {
+            int bookID = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
+            pst = connection.prepareStatement("DELETE FROM tbl_books WHERE book_id=?");
+            pst.setInt(1, bookID);
+            int a = pst.executeUpdate();
+
+            if(a==1){
+                JOptionPane.showMessageDialog(null, "Record has been deleted.");
+            } else{
+                JOptionPane.showMessageDialog(null, "Record has not been deleted.");
+            }
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(null, "Error: Record has not been deleted. Please try" +
+                    " again." , "Delete Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

@@ -349,11 +349,16 @@
               <text value="User Menu"/>
             </properties>
           </component>
-          <vspacer id="ff203">
+          <component id="39d8" class="javax.swing.JLabel">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
-          </vspacer>
+            <properties>
+              <font name="Roboto Light" size="14" style="0"/>
+              <foreground color="-16777216"/>
+              <text value="Feature still in development..."/>
+            </properties>
+          </component>
         </children>
       </grid>
       <grid id="6af01" binding="manageCatalogPanel" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -415,12 +420,12 @@
             </constraints>
             <properties/>
           </component>
-          <component id="4c9c1" class="javax.swing.JButton" binding="backButton" default-binding="true">
+          <component id="4c9c1" class="javax.swing.JButton" binding="btnManageCatalogBack">
             <constraints>
               <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Back"/>
+              <text value="Back to Home"/>
             </properties>
           </component>
           <component id="7cc2d" class="javax.swing.JLabel">
