@@ -6,10 +6,10 @@ This Java class handles database operations:
  */
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 public class DatabaseHandler {
     private Connection connection;
     private PreparedStatement pst;
@@ -27,6 +27,7 @@ public class DatabaseHandler {
         } catch (SQLException | ClassNotFoundException e){
             JOptionPane.showMessageDialog(null, "Error loading database.", "Database Loading " +
                     "Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(-1);
         }
     }
 
@@ -87,7 +88,7 @@ public class DatabaseHandler {
 
     //View a column on a JComboBox:
     //Will be used to view primary keys (mostly)
-    public void viewColumn(JComboBox comboBox){
+    public void viewColumn(JComboBox<Integer> comboBox){
         try{
             String sql = "SELECT book_id FROM tbl_books";
             pst = connection.prepareStatement(sql);
@@ -95,7 +96,7 @@ public class DatabaseHandler {
             comboBox.removeAllItems();
             while(rs.next())
             {
-                comboBox.addItem(rs.getString(1));
+                comboBox.addItem(rs.getInt(1));
             }
         } catch (SQLException e){
             JOptionPane.showMessageDialog(null, "An error has occurred when reading the database " +
@@ -105,7 +106,7 @@ public class DatabaseHandler {
     }
 
     //Read or view an entry in the books table by using the book_id
-    public void displayRecord(JComboBox comboBox, JTextField txtName, JTextField txtGenre, JSpinner txtQuantity){
+    public void displayRecord(JComboBox<Integer> comboBox, JTextField txtName, JTextField txtGenre, JSpinner txtQuantity){
         try{
             String bookID = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
 
@@ -149,7 +150,7 @@ public class DatabaseHandler {
     }
 
     //Change a record of the table
-    public void modifyRecord(JComboBox comboBox, String bookName, String bookGenre, int bookQuantity){
+    public void modifyRecord(JComboBox<Integer> comboBox, String bookName, String bookGenre, int bookQuantity){
         try{
             int bookID = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
             String sql = "UPDATE tbl_books SET book_name=?, book_genre=?, book_quantity=? WHERE book_id=?";
@@ -174,7 +175,7 @@ public class DatabaseHandler {
         }
     }
 
-    public void deleteRecord(JComboBox comboBox){
+    public void deleteRecord(JComboBox<Integer> comboBox){
         try {
             int bookID = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
             pst = connection.prepareStatement("DELETE FROM tbl_books WHERE book_id=?");
@@ -190,6 +191,32 @@ public class DatabaseHandler {
             JOptionPane.showMessageDialog(null, "Error: Record has not been deleted. Please try" +
                     " again." , "Delete Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void displayTable(DefaultTableModel tableModel){
+        try {
+            pst = connection.prepareStatement("SELECT * FROM tbl_books");
+            rs = pst.executeQuery();
+            while(rs.next()){
+                int bookID = rs.getInt("book_id");
+                String bookName = rs.getString("book_name");
+                String bookGenre = rs.getString("book_genre");
+                int bookQuantity = rs.getInt("book_quantity");
+                Object[] row = {bookID, bookName, bookGenre, bookQuantity};
+                tableModel.addRow(row);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error: Failed to display the table. ",
+                 "Table Display Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //Refresh the table after any changes
+    public void refreshTable(JTable table){
+        DefaultTableModel tblModel = (DefaultTableModel) table.getModel();
+        tblModel.setRowCount(0);
+        displayTable(tblModel);
+
     }
 
 }

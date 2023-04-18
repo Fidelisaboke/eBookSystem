@@ -3,6 +3,7 @@ This class is where the GUI of the program is designed, mainly focusing on the f
 various events that take place depending on the user's interaction with the GUI.
  */
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
@@ -40,7 +41,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnDelete;
     private JTable tblAvailableBooks;
     private JButton btnManageCatalogSearch;
-    private JComboBox txtBookID;
+    private JComboBox<Integer> txtBookID;
     private JTextField txtBookName;
     private JTextField txtBookGenre;
     private JButton btnManageCatalogBack;
@@ -118,6 +119,12 @@ public class eBookGUI extends JFrame implements ActionListener{
         btnModify.addActionListener(this);
         btnDelete.addActionListener(this);
 
+        //'Modelling' the tables:
+        DefaultTableModel modelBooks = createBooksTableModel();
+
+        //tblAvailableBooks:
+        initializeTable(tblAvailableBooks, modelBooks);
+        db.displayTable(modelBooks);//display data onto the table
 
 
 
@@ -194,6 +201,25 @@ public class eBookGUI extends JFrame implements ActionListener{
         txtQuantity.setValue(0);
     }
 
+    //TABLE FUNCTIONS:
+    //Initialize common properties:
+    public void initializeTable(JTable table, DefaultTableModel tableModel){
+        table.setModel(tableModel);
+        table.setEnabled(false);//to make the table read-only
+        table.getTableHeader().setReorderingAllowed(false);//To prevent reordering of columns
+    }
+    //Set the model for tableBooks:
+    public DefaultTableModel createBooksTableModel(){
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Book ID");
+        tableModel.addColumn("Book Name");
+        tableModel.addColumn("Book Genre");
+        tableModel.addColumn("Quantity");
+
+        return tableModel;
+    }
+
+    //actionPerformed for button clicked events:
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -306,6 +332,7 @@ public class eBookGUI extends JFrame implements ActionListener{
                 String bookGenre = txtBookGenre.getText();
                 int bookQuantity = (int) txtQuantity.getValue();
                 db.addRecord(bookName, bookGenre, bookQuantity);
+                db.refreshTable(tblAvailableBooks);
                 db.viewColumn(txtBookID);
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(eBookGUI.this, "An error has been encountered.\n" +
@@ -316,8 +343,10 @@ public class eBookGUI extends JFrame implements ActionListener{
             String bookGenre = txtBookGenre.getText();
             int bookQuantity = (int) txtQuantity.getValue();
             db.modifyRecord(txtBookID, bookName, bookGenre, bookQuantity);
+            db.refreshTable(tblAvailableBooks);
         } else if(e.getSource()==btnDelete) {
             db.deleteRecord(txtBookID);
+            db.refreshTable(tblAvailableBooks);
         }
     }
 
