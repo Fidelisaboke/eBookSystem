@@ -211,9 +211,9 @@ public class eBookGUI extends JFrame implements ActionListener{
     //Set the model for tableBooks:
     public DefaultTableModel createBooksTableModel(){
         DefaultTableModel tableModel = new DefaultTableModel();
-        tableModel.addColumn("Book ID");
-        tableModel.addColumn("Book Name");
-        tableModel.addColumn("Book Genre");
+        tableModel.addColumn("Book_ID");
+        tableModel.addColumn("Book_Name");
+        tableModel.addColumn("Book_Genre");
         tableModel.addColumn("Quantity");
 
         return tableModel;
