@@ -219,7 +219,8 @@ public class eBookGUI extends JFrame implements ActionListener{
         return tableModel;
     }
 
-    //actionPerformed for button clicked events:
+    //actionPerformed for button clicked events
+    //It is meant to cover all the buttons of the program:
     @Override
     public void actionPerformed(ActionEvent e) {
 
