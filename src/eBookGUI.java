@@ -204,7 +204,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     public void clearManageCatalogFields(){
         txtBookName.setText("");
         txtBookGenre.setText("");
-        txtQuantity.setValue(0);
+        txtQuantity.setValue(1);
     }
 
     //TABLE FUNCTIONS:
