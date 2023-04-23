@@ -55,6 +55,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     //Instantiate the "DatabaseHandler" class to auto-connect to the DB and use existing functions:
     DatabaseHandler db = new DatabaseHandler();
 
+    //The constructor for creating the frame and adding the components of the frame:
     public eBookGUI(){
         //Opening the DB Connection:
         db.establishConnection();
@@ -132,7 +133,8 @@ public class eBookGUI extends JFrame implements ActionListener{
 
 
 
-        //WindowListener for when the 'X' on the frame is clicked:
+        //WindowListener for when the 'X' on the frame is clicked.
+        //A dialog pops up when it's clicked, asking the user whether to close the program or not:
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -228,6 +230,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
 
+
         //HOME PANEL:
         if (e.getSource()==btnAdminLogin) {
             showAdminLoginPanel();
@@ -236,6 +239,7 @@ public class eBookGUI extends JFrame implements ActionListener{
         } else if (e.getSource()== btnRegister){
             showUserRegisterPanel();
         }
+
 
         //ADMIN LOGIN PANEL:
         else if (e.getSource()==btnAdminBack){
@@ -260,6 +264,7 @@ public class eBookGUI extends JFrame implements ActionListener{
                         "password.", "Verification Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+
 
         //USER LOGIN PANEL:
         else if (e.getSource()==btnUserBack){
@@ -290,6 +295,7 @@ public class eBookGUI extends JFrame implements ActionListener{
 
         }
 
+
         //USER REGISTER PANEL:
         else if (e.getSource()==btnRegisterBack){
             clearUserRegisterFields();
@@ -313,6 +319,7 @@ public class eBookGUI extends JFrame implements ActionListener{
                 }
             }
         }
+
 
         //ADMIN MENU PANEL:
         else if(e.getSource()==btnAvailableBooks){

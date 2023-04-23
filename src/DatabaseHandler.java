@@ -105,7 +105,7 @@ public class DatabaseHandler {
 
     }
 
-    //Read or view an entry in the books table by using the book_id
+    //Read or view an entry in the books table by using the book_id:
     public void displayRecord(JComboBox<Integer> comboBox, JTextField txtName, JTextField txtGenre, JSpinner txtQuantity){
         try{
             String bookID = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
@@ -128,7 +128,7 @@ public class DatabaseHandler {
         }
     }
 
-    //Add record to the books table
+    //Add a record to the books table:
     public void addRecord(String bookName, String bookGenre, int bookQuantity){
         try{
             pst = connection.prepareStatement("INSERT INTO tbl_books (book_name, book_genre, book_quantity) VALUES (?,?,?)");
@@ -149,7 +149,7 @@ public class DatabaseHandler {
         }
     }
 
-    //Change a record of the table
+    //Change a record of the table:
     public void modifyRecord(JComboBox<Integer> comboBox, String bookName, String bookGenre, int bookQuantity){
         try{
             int bookID = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
@@ -175,6 +175,7 @@ public class DatabaseHandler {
         }
     }
 
+    //Delete a record:
     public void deleteRecord(JComboBox<Integer> comboBox){
         try {
             int bookID = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
@@ -193,6 +194,7 @@ public class DatabaseHandler {
         }
     }
 
+    //Display a table from the database onto a JTable
     public void displayTable(DefaultTableModel tableModel){
         try {
             pst = connection.prepareStatement("SELECT * FROM tbl_books");
@@ -211,7 +213,7 @@ public class DatabaseHandler {
         }
     }
 
-    //Refresh the table after any changes
+    //Refresh the table after any changes are made to the table's data:
     public void refreshTable(JTable table){
         DefaultTableModel tblModel = (DefaultTableModel) table.getModel();
         tblModel.setRowCount(0);
