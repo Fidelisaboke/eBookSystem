@@ -47,6 +47,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnManageCatalogBack;
     private JButton btnInsert;
     private JSpinner txtQuantity;
+    private JButton btnUserMenuBack;
 
     //Regular expression that checks the username entered during registration
     String username_regex = "^[a-zA-Z0-9]{1,16}$";
@@ -118,6 +119,9 @@ public class eBookGUI extends JFrame implements ActionListener{
         btnInsert.addActionListener(this);
         btnModify.addActionListener(this);
         btnDelete.addActionListener(this);
+
+        //User Menu Panel:
+        btnUserMenuBack.addActionListener(this);
 
         //'Modelling' the tables:
         DefaultTableModel modelBooks = createBooksTableModel();
@@ -348,6 +352,12 @@ public class eBookGUI extends JFrame implements ActionListener{
         } else if(e.getSource()==btnDelete) {
             db.deleteRecord(txtBookID);
             db.refreshTable(tblAvailableBooks);
+        }
+
+
+        //USER MENU PANEL:
+        else if(e.getSource()==btnUserMenuBack){
+            showHomePanel();
         }
     }
 
