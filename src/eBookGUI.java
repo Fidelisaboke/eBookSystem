@@ -48,6 +48,8 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnInsert;
     private JSpinner txtQuantity;
     private JButton btnUserMenuBack;
+    private JButton btnUserMenuCatalog;
+    private JPanel catalogPanel;
 
     //Regular expression that checks the username entered during registration
     String username_regex = "^[a-zA-Z0-9]{1,16}$";
@@ -82,6 +84,8 @@ public class eBookGUI extends JFrame implements ActionListener{
         containerPanel.add("Admin Menu Panel", adminMenuPanel);
         containerPanel.add("User Menu Panel", userMenuPanel);
         containerPanel.add("Manage Catalog Panel", manageCatalogPanel);
+        containerPanel.add("Catalog Panel", catalogPanel);
+
         //Adding the containerPanel:
         this.add(containerPanel);
 
@@ -123,6 +127,7 @@ public class eBookGUI extends JFrame implements ActionListener{
 
         //User Menu Panel:
         btnUserMenuBack.addActionListener(this);
+        btnUserMenuCatalog.addActionListener(this);
 
         //'Modelling' the tables:
         DefaultTableModel modelBooks = createBooksTableModel();
@@ -186,6 +191,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     public void showManageCatalogPanel(){
         cl.show(containerPanel, "Manage Catalog Panel");
     }
+    public void showCatalogPanel() {cl.show(containerPanel, "Catalog Panel");}
 
     //Clearing fields on panels:
     public void clearUserLoginFields(){
@@ -365,6 +371,8 @@ public class eBookGUI extends JFrame implements ActionListener{
         //USER MENU PANEL:
         else if(e.getSource()==btnUserMenuBack){
             showHomePanel();
+        } else if(e.getSource()==btnUserMenuCatalog){
+            showCatalogPanel();
         }
     }
 
