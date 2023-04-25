@@ -271,6 +271,7 @@ public class eBookGUI extends JFrame implements ActionListener{
                 Object bookNameValue = tblCatalog.getValueAt(row, 1);
                 Object bookGenreValue = tblCatalog.getValueAt(row, 2);
 
+                //Checking if the variables have a value other than null and if a book exists in the tblSelectedBooks:
                 if (bookNameValue != null && bookGenreValue != null && isBookNotSelected()) {
                     Object bookQuantityValue = txtCatalogQty.getValue();
                     Vector<Object> newRowData = new Vector<>(Arrays.asList(bookNameValue, bookGenreValue, bookQuantityValue));
@@ -283,17 +284,19 @@ public class eBookGUI extends JFrame implements ActionListener{
         }
     }
 
-    //Add row to existing tableSelectedItems
+    //Add row to existing tblSelectedBooks
     public void addRowToTable(Vector<Object> rowData) {
         DefaultTableModel tableModel = (DefaultTableModel) tblSelectedBooks.getModel();
         tableModel.addRow(rowData);
     }
+
+    //Clearing all entries of a table:
     public void clearTable(JTable table){
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
         tableModel.setRowCount(0);
     }
 
-    //Check if a book exists in the table:
+    //Check if a book exists in tblSelectedBooks:
     public boolean isBookNotSelected(){
         String selectedBook = Objects.requireNonNull(listBookName.getSelectedItem()).toString();
         int rowCount = tblSelectedBooks.getRowCount();
