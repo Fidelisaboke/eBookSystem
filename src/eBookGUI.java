@@ -213,9 +213,6 @@ public class eBookGUI extends JFrame implements ActionListener{
     }
     public void showCatalogPanel() {cl.show(containerPanel, "Catalog Panel");}
 
-    //Displaying columns on JComboBoxes:
-
-
     //Clearing fields on panels:
     public void clearUserLoginFields(){
         txtUserUsername.setText("");
@@ -266,20 +263,20 @@ public class eBookGUI extends JFrame implements ActionListener{
     //Add records from Available Books to Selected books
     public void addRecordToSelection() {
         String selectedBook = Objects.requireNonNull(listBookName.getSelectedItem()).toString();
-       // System.out.println(selectedBook);
-
         int rowCount = tblCatalog.getRowCount();
+
         for (int row = 0; row < rowCount; row++) {
             Object value = tblCatalog.getValueAt(row, 1);
             if (value != null && value.toString().equals(selectedBook)) {
-                //System.out.println(value.toString().equals(selectedBook));
                 Object bookNameValue = tblCatalog.getValueAt(row, 1);
                 Object bookGenreValue = tblCatalog.getValueAt(row, 2);
 
-                if (bookNameValue != null && bookGenreValue != null) {
+                if (bookNameValue != null && bookGenreValue != null && isBookNotSelected()) {
                     Object bookQuantityValue = txtCatalogQty.getValue();
                     Vector<Object> newRowData = new Vector<>(Arrays.asList(bookNameValue, bookGenreValue, bookQuantityValue));
                     addRowToTable(newRowData);
+                } else{
+                    JOptionPane.showMessageDialog(eBookGUI.this, "Book has already been selected.");
                 }
                 break;
             }
@@ -290,6 +287,23 @@ public class eBookGUI extends JFrame implements ActionListener{
     public void addRowToTable(Vector<Object> rowData) {
         DefaultTableModel tableModel = (DefaultTableModel) tblSelectedBooks.getModel();
         tableModel.addRow(rowData);
+    }
+    public void clearTable(JTable table){
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        tableModel.setRowCount(0);
+    }
+
+    //Check if a book exists in the table:
+    public boolean isBookNotSelected(){
+        String selectedBook = Objects.requireNonNull(listBookName.getSelectedItem()).toString();
+        int rowCount = tblSelectedBooks.getRowCount();
+        for (int row = 0; row < rowCount; row++) {
+            Object value = tblSelectedBooks.getValueAt(row, 0);
+            if(value.toString().equals(selectedBook)){
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -445,6 +459,8 @@ public class eBookGUI extends JFrame implements ActionListener{
             showUserMenuPanel();
         } else if(e.getSource()==btnCatalogCart){
             addRecordToSelection();
+        } else if(e.getSource()==btnCatalogClear){
+            clearTable(tblSelectedBooks);
         }
     }
 
