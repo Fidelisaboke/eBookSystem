@@ -50,6 +50,13 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnUserMenuBack;
     private JButton btnUserMenuCatalog;
     private JPanel catalogPanel;
+    private JTable tblCatalog;
+    private JTable tblSelectedBooks;
+    private JButton btnCatalogBack;
+    private JComboBox comboBox1;
+    private JButton btnCatalogClear;
+    private JButton btnCatalogCart;
+    private JButton btnCatalogConfirm;
 
     //Regular expression that checks the username entered during registration
     String username_regex = "^[a-zA-Z0-9]{1,16}$";
@@ -128,6 +135,12 @@ public class eBookGUI extends JFrame implements ActionListener{
         //User Menu Panel:
         btnUserMenuBack.addActionListener(this);
         btnUserMenuCatalog.addActionListener(this);
+
+        //Catalog Panel:
+        btnCatalogBack.addActionListener(this);
+        btnCatalogCart.addActionListener(this);
+        btnCatalogClear.addActionListener(this);
+        btnCatalogConfirm.addActionListener(this);
 
         //'Modelling' the tables:
         DefaultTableModel modelBooks = createBooksTableModel();
@@ -373,6 +386,12 @@ public class eBookGUI extends JFrame implements ActionListener{
             showHomePanel();
         } else if(e.getSource()==btnUserMenuCatalog){
             showCatalogPanel();
+        }
+
+
+        //CATALOG PANEL:
+        else if(e.getSource()==btnCatalogBack){
+            showUserMenuPanel();
         }
     }
 
