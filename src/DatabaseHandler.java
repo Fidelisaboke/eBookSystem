@@ -86,9 +86,9 @@ public class DatabaseHandler {
 
     }
 
-    //View a column on a JComboBox:
+    //View book ids on a JComboBox:
     //Will be used to view primary keys (mostly)
-    public void viewColumn(JComboBox<Integer> comboBox){
+    public void loadBookIDs(JComboBox<Integer> comboBox){
         try{
             String sql = "SELECT book_id FROM tbl_books";
             pst = connection.prepareStatement(sql);
@@ -103,6 +103,24 @@ public class DatabaseHandler {
                     "column.", "Column Load Error", JOptionPane.ERROR_MESSAGE);
         }
 
+    }
+
+
+    //View book names on a JComboBox:
+    public void loadBookNames(JComboBox<String> comboBox){
+        try{
+            String sql = "SELECT book_name FROM tbl_books";
+            pst = connection.prepareStatement(sql);
+            rs = pst.executeQuery();
+            comboBox.removeAllItems();
+            while(rs.next())
+            {
+                comboBox.addItem(rs.getString(1));
+            }
+        } catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "An error has occurred when reading the database " +
+                    "column.", "Column Load Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     //Read or view an entry in the books table by using the book_id:
@@ -195,7 +213,7 @@ public class DatabaseHandler {
     }
 
     //Display a table from the database onto a JTable
-    public void displayTable(DefaultTableModel tableModel){
+    public void displayBooksTable(DefaultTableModel tableModel){
         try {
             pst = connection.prepareStatement("SELECT * FROM tbl_books");
             rs = pst.executeQuery();
@@ -217,7 +235,7 @@ public class DatabaseHandler {
     public void refreshTable(JTable table){
         DefaultTableModel tblModel = (DefaultTableModel) table.getModel();
         tblModel.setRowCount(0);
-        displayTable(tblModel);
+        displayBooksTable(tblModel);
 
     }
 

@@ -41,7 +41,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnDelete;
     private JTable tblAvailableBooks;
     private JButton btnManageCatalogSearch;
-    private JComboBox<Integer> txtBookID;
+    private JComboBox<Integer> listBookID;
     private JTextField txtBookName;
     private JTextField txtBookGenre;
     private JButton btnManageCatalogBack;
@@ -53,7 +53,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JTable tblCatalog;
     private JTable tblSelectedBooks;
     private JButton btnCatalogBack;
-    private JComboBox comboBox1;
+    private JComboBox<String> listBookName;
     private JButton btnCatalogClear;
     private JButton btnCatalogCart;
     private JButton btnCatalogConfirm;
@@ -147,7 +147,10 @@ public class eBookGUI extends JFrame implements ActionListener{
 
         //tblAvailableBooks:
         initializeTable(tblAvailableBooks, modelBooks);
-        db.displayTable(modelBooks);//display data onto the table
+        initializeTable(tblCatalog, modelBooks);
+
+        //Display data onto the table:
+        db.displayBooksTable(modelBooks);
 
 
 
@@ -205,6 +208,9 @@ public class eBookGUI extends JFrame implements ActionListener{
         cl.show(containerPanel, "Manage Catalog Panel");
     }
     public void showCatalogPanel() {cl.show(containerPanel, "Catalog Panel");}
+
+    //Displaying columns on JComboBoxes:
+
 
     //Clearing fields on panels:
     public void clearUserLoginFields(){
@@ -343,7 +349,7 @@ public class eBookGUI extends JFrame implements ActionListener{
         //ADMIN MENU PANEL:
         else if(e.getSource()==btnAvailableBooks){
             showManageCatalogPanel();
-            db.viewColumn(txtBookID);
+            db.loadBookIDs(listBookID);
         } else if(e.getSource()==btnLoanedBooks){
             JOptionPane.showMessageDialog(eBookGUI.this, "Feature still in development!");
         }
@@ -355,7 +361,7 @@ public class eBookGUI extends JFrame implements ActionListener{
             showHomePanel();
         }
         else if(e.getSource()==btnManageCatalogSearch){
-            db.displayRecord(txtBookID, txtBookName, txtBookGenre, txtQuantity);
+            db.displayRecord(listBookID, txtBookName, txtBookGenre, txtQuantity);
         } else if(e.getSource()==btnInsert){
 
             try {
@@ -364,7 +370,7 @@ public class eBookGUI extends JFrame implements ActionListener{
                 int bookQuantity = (int) txtQuantity.getValue();
                 db.addRecord(bookName, bookGenre, bookQuantity);
                 db.refreshTable(tblAvailableBooks);
-                db.viewColumn(txtBookID);
+                db.loadBookIDs(listBookID);
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(eBookGUI.this, "An error has been encountered.\n" +
                         "Please check your input and try again.", "Insert Error", JOptionPane.ERROR_MESSAGE);
@@ -373,10 +379,10 @@ public class eBookGUI extends JFrame implements ActionListener{
             String bookName = txtBookName.getText();
             String bookGenre = txtBookGenre.getText();
             int bookQuantity = (int) txtQuantity.getValue();
-            db.modifyRecord(txtBookID, bookName, bookGenre, bookQuantity);
+            db.modifyRecord(listBookID, bookName, bookGenre, bookQuantity);
             db.refreshTable(tblAvailableBooks);
         } else if(e.getSource()==btnDelete) {
-            db.deleteRecord(txtBookID);
+            db.deleteRecord(listBookID);
             db.refreshTable(tblAvailableBooks);
         }
 
@@ -386,6 +392,7 @@ public class eBookGUI extends JFrame implements ActionListener{
             showHomePanel();
         } else if(e.getSource()==btnUserMenuCatalog){
             showCatalogPanel();
+            db.loadBookNames(listBookName);
         }
 
 
