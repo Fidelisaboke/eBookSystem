@@ -7,7 +7,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Vector;
 
 public class eBookGUI extends JFrame implements ActionListener{
     //Components from the form are initialized here
@@ -145,16 +147,16 @@ public class eBookGUI extends JFrame implements ActionListener{
         btnCatalogConfirm.addActionListener(this);
 
         //'Modelling' the tables:
-        DefaultTableModel modelBooks = createBooksTableModel();
+        DefaultTableModel modelCatalog = createBooksTableModel();
+        DefaultTableModel modelSelectedBooks = createSelectedBooksTableModel();
 
         //tblAvailableBooks:
-        initializeTable(tblAvailableBooks, modelBooks);
-        initializeTable(tblCatalog, modelBooks);
+        initializeTable(tblAvailableBooks, modelCatalog);
+        initializeTable(tblCatalog, modelCatalog);
+        initializeTable(tblSelectedBooks, modelSelectedBooks);
 
         //Display data onto the table:
-        db.displayBooksTable(modelBooks);
-
-
+        db.displayBooksTable(modelCatalog);
 
         //WindowListener for when the 'X' on the frame is clicked.
         //A dialog pops up when it's clicked, asking the user whether to close the program or not:
@@ -251,6 +253,46 @@ public class eBookGUI extends JFrame implements ActionListener{
 
         return tableModel;
     }
+
+    public DefaultTableModel createSelectedBooksTableModel(){
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Book_Name");
+        tableModel.addColumn("Book_Genre");
+        tableModel.addColumn("Quantity");
+
+        return tableModel;
+    }
+    //Transfer a record from one table to another:
+    //Add records from Available Books to Selected books
+    public void addRecordToSelection() {
+        String selectedBook = Objects.requireNonNull(listBookName.getSelectedItem()).toString();
+       // System.out.println(selectedBook);
+
+        int rowCount = tblCatalog.getRowCount();
+        for (int row = 0; row < rowCount; row++) {
+            Object value = tblCatalog.getValueAt(row, 1);
+            if (value != null && value.toString().equals(selectedBook)) {
+                //System.out.println(value.toString().equals(selectedBook));
+                Object bookNameValue = tblCatalog.getValueAt(row, 1);
+                Object bookGenreValue = tblCatalog.getValueAt(row, 2);
+
+                if (bookNameValue != null && bookGenreValue != null) {
+                    Object bookQuantityValue = txtCatalogQty.getValue();
+                    Vector<Object> newRowData = new Vector<>(Arrays.asList(bookNameValue, bookGenreValue, bookQuantityValue));
+                    addRowToTable(newRowData);
+                }
+                break;
+            }
+        }
+    }
+
+    //Add row to existing tableSelectedItems
+    public void addRowToTable(Vector<Object> rowData) {
+        DefaultTableModel tableModel = (DefaultTableModel) tblSelectedBooks.getModel();
+        tableModel.addRow(rowData);
+    }
+
+
 
     //actionPerformed for button clicked events
     //It is meant to cover all the buttons of the program:
@@ -401,6 +443,8 @@ public class eBookGUI extends JFrame implements ActionListener{
         //CATALOG PANEL:
         else if(e.getSource()==btnCatalogBack){
             showUserMenuPanel();
+        } else if(e.getSource()==btnCatalogCart){
+            addRecordToSelection();
         }
     }
 
