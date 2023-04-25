@@ -57,6 +57,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnCatalogClear;
     private JButton btnCatalogCart;
     private JButton btnCatalogConfirm;
+    private JSpinner txtCatalogQty;
 
     //Regular expression that checks the username entered during registration
     String username_regex = "^[a-zA-Z0-9]{1,16}$";
@@ -100,6 +101,7 @@ public class eBookGUI extends JFrame implements ActionListener{
         //Limiting the values of the spinner(s) in the program:
         SpinnerModel model = new SpinnerNumberModel(1, 1, 100, 1);
         txtQuantity.setModel(model);
+        txtCatalogQty.setModel(model);
 
         //ActionListeners for the buttons:
         //Home Panel:
