@@ -271,11 +271,21 @@ public class eBookGUI extends JFrame implements ActionListener{
                 Object bookNameValue = tblCatalog.getValueAt(row, 1);
                 Object bookGenreValue = tblCatalog.getValueAt(row, 2);
 
+                int initialBookQty = (int) tblCatalog.getValueAt(row, 3);
+
                 //Checking if the variables have a value other than null and if a book exists in the tblSelectedBooks:
                 if (bookNameValue != null && bookGenreValue != null && isBookNotSelected()) {
                     Object bookQuantityValue = txtCatalogQty.getValue();
-                    Vector<Object> newRowData = new Vector<>(Arrays.asList(bookNameValue, bookGenreValue, bookQuantityValue));
-                    addRowToTable(newRowData);
+                    int selectedBookQty = (int) bookQuantityValue;
+                    int remainingQty = initialBookQty - selectedBookQty;
+
+                    if(remainingQty<0 ){
+                        JOptionPane.showMessageDialog(eBookGUI.this, "Quantity selected exceeds " +
+                                "quantity available. Please try again.");
+                    } else{
+                        Vector<Object> newRowData = new Vector<>(Arrays.asList(bookNameValue, bookGenreValue, bookQuantityValue));
+                        addRowToTable(newRowData);
+                    }
                 } else{
                     JOptionPane.showMessageDialog(eBookGUI.this, "Book has already been selected.");
                 }
@@ -283,6 +293,7 @@ public class eBookGUI extends JFrame implements ActionListener{
             }
         }
     }
+
 
     //Add row to existing tblSelectedBooks
     public void addRowToTable(Vector<Object> rowData) {
