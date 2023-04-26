@@ -60,6 +60,7 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnCatalogCart;
     private JButton btnCatalogConfirm;
     private JSpinner txtCatalogQty;
+    private JPanel confirmPanel;
 
     //Regular expression that checks the username entered during registration
     String username_regex = "^[a-zA-Z0-9]{1,16}$";
@@ -95,6 +96,7 @@ public class eBookGUI extends JFrame implements ActionListener{
         containerPanel.add("User Menu Panel", userMenuPanel);
         containerPanel.add("Manage Catalog Panel", manageCatalogPanel);
         containerPanel.add("Catalog Panel", catalogPanel);
+        containerPanel.add("Confirm Panel", confirmPanel);
 
         //Adding the containerPanel:
         this.add(containerPanel);
@@ -211,7 +213,14 @@ public class eBookGUI extends JFrame implements ActionListener{
     public void showManageCatalogPanel(){
         cl.show(containerPanel, "Manage Catalog Panel");
     }
-    public void showCatalogPanel() {cl.show(containerPanel, "Catalog Panel");}
+    public void showCatalogPanel() {
+        cl.show(containerPanel, "Catalog Panel");
+    }
+    public void showConfirmPanel(){
+        cl.show(containerPanel, "Confirm Panel");
+    }
+
+
 
     //Clearing fields on panels:
     public void clearUserLoginFields(){
@@ -475,6 +484,8 @@ public class eBookGUI extends JFrame implements ActionListener{
             addRecordToSelection();
         } else if(e.getSource()==btnCatalogClear){
             clearTable(tblSelectedBooks);
+        } else if(e.getSource()==btnCatalogConfirm){
+            showConfirmPanel();
         }
     }
 
