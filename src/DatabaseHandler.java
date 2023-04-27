@@ -25,7 +25,8 @@ public class DatabaseHandler {
             Class.forName(DB_DRIVER);
             connection = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
         } catch (SQLException | ClassNotFoundException e){
-            JOptionPane.showMessageDialog(null, "Error loading database.", "Database Loading " +
+            JOptionPane.showMessageDialog(null, "Error loading database. Please check if MySQL " +
+                    "server is running", "Database Loading " +
                     "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(-1);
         }
