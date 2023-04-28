@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.print.PrinterException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -372,6 +373,19 @@ public class eBookGUI extends JFrame implements ActionListener{
         area.append("\nTotal no. of books: "+table.getRowCount());
     }
 
+    public void printContent(JTextArea area){
+        try {
+            boolean printed = area.print();
+            if (printed) {
+                JOptionPane.showMessageDialog(eBookGUI.this, "Receipt printed successfully!");
+            } else {
+                JOptionPane.showMessageDialog(eBookGUI.this, "Printing has been cancelled.");
+            }
+        } catch (PrinterException ex) {
+            JOptionPane.showMessageDialog(eBookGUI.this, "An error occured when printing");
+        }
+    }
+
 
 
     //actionPerformed for button clicked events
@@ -542,8 +556,8 @@ public class eBookGUI extends JFrame implements ActionListener{
         else if(e.getSource()==btnConfirmBack){
             showCatalogPanel();
         } else if(e.getSource()==btnConfirmPrint){
+            printContent(txtReceipt);
             System.out.println("Printing...");
-
         } else if(e.getSource()==btnConfirmExit){
             exitToHomePage();
             clearTable(tblSelectedBooks);
