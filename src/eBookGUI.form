@@ -622,7 +622,11 @@
                 <preferred-size width="150" height="50"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <editable value="false"/>
+              <enabled value="true"/>
+              <font name="Bahnschrift" size="12" style="0"/>
+            </properties>
           </component>
           <component id="3c265" class="javax.swing.JButton" binding="btnConfirmBack">
             <constraints>

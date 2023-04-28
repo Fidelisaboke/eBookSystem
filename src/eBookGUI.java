@@ -7,6 +7,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Vector;
@@ -152,6 +154,11 @@ public class eBookGUI extends JFrame implements ActionListener{
         btnCatalogClear.addActionListener(this);
         btnCatalogConfirm.addActionListener(this);
 
+        //Confirm panel:
+        btnConfirmBack.addActionListener(this);
+        btnConfirmPrint.addActionListener(this);
+        btnConfirmExit.addActionListener(this);
+
         //'Modelling' the tables:
         DefaultTableModel modelCatalog = createBooksTableModel();
         DefaultTableModel modelSelectedBooks = createSelectedBooksTableModel();
@@ -195,6 +202,11 @@ public class eBookGUI extends JFrame implements ActionListener{
     CardLayout cl = (CardLayout)(containerPanel.getLayout());
 
     //FUNCTIONS:
+    //Getting the current system date and time:
+    LocalDateTime current = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    String currentDateTime = current.format(formatter);
+
     //Showing the panels:
     public void showHomePanel(){
         cl.show(containerPanel, "Home Panel");
@@ -343,6 +355,21 @@ public class eBookGUI extends JFrame implements ActionListener{
         if(OptionSelection==0){
             showHomePanel();
         }
+    }
+
+    //Create the receipt (Add entries from a JTable to a JTextArea)
+    //This function loops through a table and appends the value to the text area (row by column):
+    public void buildReceipt(JTable table, JTextArea area){
+        area.setText(currentDateTime+"\n");
+        area.append("Book Name"+"\t"+"Book Genre"+"\t"+"Book Quantity"+"\n");
+        for (int row = 0; row < table.getRowCount(); row++) {
+            for (int col = 0; col < table.getColumnCount(); col++) {
+                Object value = table.getValueAt(row, col);
+                area.append(value.toString() + "\t");
+            }
+            area.append("\n");
+        }
+        area.append("\nTotal no. of books: "+table.getRowCount());
     }
 
 
@@ -502,7 +529,9 @@ public class eBookGUI extends JFrame implements ActionListener{
             clearTable(tblSelectedBooks);
         } else if(e.getSource()==btnCatalogConfirm){
             if(tblSelectedBooks.getRowCount()>0){
+                //txtReceipt.setText("Book Name"+"*****"+"Book Genre"+"*****"+"Book Quantity"+"\n");
                 showConfirmPanel();
+                buildReceipt(tblSelectedBooks, txtReceipt);
             } else{
                 JOptionPane.showMessageDialog(eBookGUI.this, "Please make a selection.");
             }
@@ -514,8 +543,10 @@ public class eBookGUI extends JFrame implements ActionListener{
             showCatalogPanel();
         } else if(e.getSource()==btnConfirmPrint){
             System.out.println("Printing...");
+
         } else if(e.getSource()==btnConfirmExit){
             exitToHomePage();
+            clearTable(tblSelectedBooks);
         }
     }
 
