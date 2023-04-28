@@ -42,7 +42,6 @@ public class DatabaseHandler {
         }
     }
 
-
     //Verifying the admin password entered:
     public boolean verifyAdminPassword(String password) throws SQLException {
         String sql = "SELECT * FROM tbl_admin WHERE admin_password = ?";

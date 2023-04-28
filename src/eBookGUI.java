@@ -61,6 +61,10 @@ public class eBookGUI extends JFrame implements ActionListener{
     private JButton btnCatalogConfirm;
     private JSpinner txtCatalogQty;
     private JPanel confirmPanel;
+    private JTextArea txtReceipt;
+    private JButton btnConfirmBack;
+    private JButton btnConfirmPrint;
+    private JButton btnConfirmExit;
 
     //Regular expression that checks the username entered during registration
     String username_regex = "^[a-zA-Z0-9]{1,16}$";
@@ -329,6 +333,18 @@ public class eBookGUI extends JFrame implements ActionListener{
         return true;
     }
 
+    //Option dialog for exiting directly to the home page:
+    public void exitToHomePage(){
+        String[] Options ={"Yes", "No"};
+        int OptionSelection = JOptionPane.showOptionDialog(null,
+                "Do you want to go back to the home page?", "Confirm Exit",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null,
+                Options,Options[1]);
+        if(OptionSelection==0){
+            showHomePanel();
+        }
+    }
+
 
 
     //actionPerformed for button clicked events
@@ -485,7 +501,21 @@ public class eBookGUI extends JFrame implements ActionListener{
         } else if(e.getSource()==btnCatalogClear){
             clearTable(tblSelectedBooks);
         } else if(e.getSource()==btnCatalogConfirm){
-            showConfirmPanel();
+            if(tblSelectedBooks.getRowCount()>0){
+                showConfirmPanel();
+            } else{
+                JOptionPane.showMessageDialog(eBookGUI.this, "Please make a selection.");
+            }
+        }
+
+
+        //CONFIRM PANEL:
+        else if(e.getSource()==btnConfirmBack){
+            showCatalogPanel();
+        } else if(e.getSource()==btnConfirmPrint){
+            System.out.println("Printing...");
+        } else if(e.getSource()==btnConfirmExit){
+            exitToHomePage();
         }
     }
 
