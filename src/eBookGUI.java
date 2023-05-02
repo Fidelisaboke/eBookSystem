@@ -506,9 +506,13 @@ public class eBookGUI extends JFrame implements ActionListener{
                 String bookName = txtBookName.getText();
                 String bookGenre = txtBookGenre.getText();
                 int bookQuantity = (int) txtQuantity.getValue();
-                db.addRecord(bookName, bookGenre, bookQuantity);
-                db.refreshTable(tblAvailableBooks);
-                db.loadBookIDs(listBookID);
+                if (bookName.equals("") || bookGenre.equals("")){
+                    JOptionPane.showMessageDialog(eBookGUI.this, "The fields are blank!");
+                } else{
+                    db.addRecord(bookName, bookGenre, bookQuantity);
+                    db.refreshTable(tblAvailableBooks);
+                    db.loadBookIDs(listBookID);
+                }
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(eBookGUI.this, "An error has been encountered.\n" +
                         "Please check your input and try again.", "Insert Error", JOptionPane.ERROR_MESSAGE);
