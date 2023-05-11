@@ -14,10 +14,24 @@ public class DatabaseHandler {
     private Connection connection;
     private PreparedStatement pst;
     private ResultSet rs;
-    static final String USERNAME = "root";
-    static final String PASSWORD = "";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/db_books";
-    static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/db_books";
+    private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+
+    private static DatabaseHandler instance = null;
+
+    // Private constructor to prevent direct object instantiation:
+    private DatabaseHandler(){
+    }
+
+    // Method for creating one instance of the DatabaseHandler:
+    public static DatabaseHandler getInstance(){
+        if (instance == null){
+            instance = new DatabaseHandler();
+        }
+        return instance;
+    }
 
     //Establish connection with the program's database:
     public void establishConnection(){

@@ -16,6 +16,7 @@ import java.util.Vector;
 
 public class eBookGUI extends JFrame implements ActionListener{
     //Components from the form are initialized here
+    private static eBookGUI frame_instance = null;
     private JPanel containerPanel;
     private JPanel homePanel;
     private JPanel adminLoginPanel;
@@ -72,11 +73,11 @@ public class eBookGUI extends JFrame implements ActionListener{
     //Regular expression that checks the username entered during registration
     String username_regex = "^[a-zA-Z0-9]{1,16}$";
 
-    //Instantiate the "DatabaseHandler" class to auto-connect to the DB and use existing functions:
-    DatabaseHandler db = new DatabaseHandler();
+    //Creating only one instance of the "DatabaseHandler" class to auto-connect to the DB and use existing functions:
+    DatabaseHandler db = DatabaseHandler.getInstance();
 
-    //The constructor for creating the frame and adding the components of the frame:
-    public eBookGUI(){
+    //The private constructor for creating the frame and adding the components of the frame:
+    private eBookGUI(){
         //Opening the DB Connection:
         db.establishConnection();
 
@@ -197,6 +198,13 @@ public class eBookGUI extends JFrame implements ActionListener{
             }
         });
 
+    }
+
+    // Creating the getInstance() method to create only one object of eBookGUI:
+    public static void getInstance(){
+        if (frame_instance == null){
+            frame_instance = new eBookGUI();
+        }
     }
 
     //Getting the layout of containerPanel, setting it to 'cl' for easier navigation.
