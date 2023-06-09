@@ -381,6 +381,8 @@ public class eBookGUI extends JFrame implements ActionListener{
         area.append("\nTotal no. of books: "+table.getRowCount());
     }
 
+    // A function that prints the contents of the selected books on a text area:
+
     public void printContent(JTextArea area){
         try {
             boolean printed = area.print();
